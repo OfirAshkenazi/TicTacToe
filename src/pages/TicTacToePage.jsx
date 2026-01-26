@@ -24,8 +24,10 @@ function WinningOptions(board) {
 }
 
 export default function TicTacToePage() {
+
   const [board, setBoard] = useState(Array(9).fill(null));
   const [isXNext, setIsXNext] = useState(true);
+  const [history, setHistory] = useState(["Game start"]);
 
   const winner = WinningOptions(board);
   const turn = isXNext ? "X" : "O";
@@ -38,12 +40,18 @@ export default function TicTacToePage() {
     next[i] = turn;
     setBoard(next);
     setIsXNext(!isXNext);
+    setHistory((prev) => [...prev,
+      `Move #${prev.length}: Player ${turn} (cell ${i})`,
+    ]);
   }
 
   function handleRestart() {
     setBoard(Array(9).fill(null));
     setIsXNext(true);
+    setHistory(["Game start"]);
   }
+
+
 
   function getStatusText(winner, turn) {
     if (winner) {
@@ -53,16 +61,56 @@ export default function TicTacToePage() {
   }
   
   const statusText = getStatusText(winner, turn);
+
   return (
-    <div style={{ padding: 24 }}>
-      <h1 style={{ marginBottom: 8 }}>Tic Tac Toe</h1>
-
-      <StatusBar text={statusText} />
-      <Board board={board} onSquareClick={handleSquareClick} />
-
-      <button style={{ marginTop: 16 }} onClick={handleRestart}>
-        Restart
-      </button>
+    <div
+      style={{
+        display: "flex",
+        gap: 120,
+        padding: 24,
+        alignItems: "flex-start",
+      }}
+    >
+      {/* left side - game */}
+      <div>
+        <h1 style={{ marginBottom: 8 }}>Tic Tac Toe</h1>
+  
+        <StatusBar text={statusText} />
+        <Board board={board} onSquareClick={handleSquareClick} />
+  
+        <button style={{ marginTop: 16 }} onClick={handleRestart}>
+          Restart
+        </button>
+      </div>
+  
+      {/* right side - move history */}
+      <div style={{ width: 260, marginTop: 33}}>
+        <h1 style={{ marginTop: 0 }}>Move History</h1>
+  
+        <div
+          style={{
+            maxHeight: 240,
+            overflowY: "auto",
+            border: "1px solid #ccc",
+            borderRadius: 8,
+            padding: 8,
+          }}
+        >
+          {history.map((item, index) => (
+            <div
+              key={index}
+              style={{
+                padding: "6px 8px",
+                marginBottom: 6,
+                borderRadius: 6,
+                border: "1px solid #ddd",
+              }}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
