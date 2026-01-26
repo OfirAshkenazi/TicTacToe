@@ -1,9 +1,84 @@
-:root {
-  font-family: system-ui, Arial, sans-serif;
+.page {
+  min-height: 100vh;
+  padding: 40px 24px;
+  background: radial-gradient(circle at top, #2b1666 0%, #070b24 70%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-body {
-  margin: 0;
-  background: #fff;
-  color: #213547;
+.layout {
+  width: 100%;
+  max-width: 980px;
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.card {
+  border-radius: 18px;
+  padding: 18px 18px 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.gameCard {
+  flex: 0 0 420px;
+}
+
+.historyCard {
+  flex: 0 0 320px;
+}
+
+.title {
+  margin: 0 0 10px;
+  color: #e8dbff;  
+  letter-spacing: 0.3px;
+}
+
+.titleSmall {
+  font-size: 24px;
+}
+
+.statusText {
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 10px;
+}
+
+.historyList {
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.historyItem {
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.restartBtn {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(183, 111, 255, 0.22);
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    flex-wrap: wrap;
+  }
+
+  .gameCard,
+  .historyCard {
+    flex: 1 1 360px;
+  }
 }
