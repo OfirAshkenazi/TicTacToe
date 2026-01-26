@@ -41,7 +41,7 @@ export default function TicTacToePage() {
     setBoard(next);
     setIsXNext(!isXNext);
     setHistory((prev) => [...prev,
-      `Move #${prev.length}: Player ${turn} (cell ${i})`,
+      `Move #${prev.length}: Player ${turn}`,
     ]);
   }
 
@@ -55,60 +55,40 @@ export default function TicTacToePage() {
 
   function getStatusText(winner, turn) {
     if (winner) {
-      return `מנצח: ${winner}`;
+      return `wins: ${winner}`;
     }
-    return `תור: ${turn}`;
+    return `Turn: ${turn}`;
   }
   
   const statusText = getStatusText(winner, turn);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: 120,
-        padding: 24,
-        alignItems: "flex-start",
-      }}
-    >
-      {/* left side - game */}
-      <div>
-        <h1 style={{ marginBottom: 8 }}>Tic Tac Toe</h1>
+    <div className="page">
+      <div className="layout">
+        
+        {/* left side - game */}
+        <div className="card gameCard">
+          <h1 className="title">Tic Tac Toe</h1>
   
-        <StatusBar text={statusText} />
-        <Board board={board} onSquareClick={handleSquareClick} />
+          <StatusBar text={statusText} />
+          <Board board={board} onSquareClick={handleSquareClick} />
   
-        <button style={{ marginTop: 16 }} onClick={handleRestart}>
-          Restart
-        </button>
-      </div>
+          <button className="restartBtn" onClick={handleRestart}>
+            Restart
+          </button>
+        </div>
   
-      {/* right side - move history */}
-      <div style={{ width: 260, marginTop: 33}}>
-        <h1 style={{ marginTop: 0 }}>Move History</h1>
+        {/* right side - move history */}
+        <div className="card historyCard">
+          <h1 className="title titleSmall">Move History</h1>
   
-        <div
-          style={{
-            maxHeight: 240,
-            overflowY: "auto",
-            border: "1px solid #ccc",
-            borderRadius: 8,
-            padding: 8,
-          }}
-        >
-          {history.map((item, index) => (
-            <div
-              key={index}
-              style={{
-                padding: "6px 8px",
-                marginBottom: 6,
-                borderRadius: 6,
-                border: "1px solid #ddd",
-              }}
-            >
-              {item}
-            </div>
-          ))}
+          <div className="historyList">
+            {history.map((item, index) => (
+              <div key={index} className="historyItem">
+                {item}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
