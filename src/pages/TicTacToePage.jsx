@@ -15,27 +15,6 @@ const WINNING_OPTIONS = [
 
 const STORAGE_KEY = "tic_tac_toe_state";
 
-useEffect(() => {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return;
-
-  const saved = JSON.parse(raw);
-
-  setBoard(saved.board);
-  setIsXNext(saved.isXNext);
-  setHistory(saved.history);
-}, []);
-
-useEffect(() => {
-  const stateToSave = {
-    board,
-    isXNext,
-    history,
-  };
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
-}, [board, isXNext, history]);
-
 
 localStorage.removeItem(STORAGE_KEY);
 
@@ -69,6 +48,28 @@ export default function TicTacToePage() {
   const [history, setHistory] = useState(["Game start"]);
   const { winner, isDrawStatus, turn } = calculateGameStatus(board, isXNext);
 
+  useEffect(() => {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+  
+    const saved = JSON.parse(raw);
+  
+    setBoard(saved.board);
+    setIsXNext(saved.isXNext);
+    setHistory(saved.history);
+  }, []);
+  
+  useEffect(() => {
+    const stateToSave = {
+      board,
+      isXNext,
+      history,
+    };
+  
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+  }, [board, isXNext, history]);
+
+
   function handleSquareClick(index) {
  
     if (winner || isDrawStatus) return;
@@ -99,6 +100,7 @@ export default function TicTacToePage() {
   } else if (isDrawStatus) {
     statusText = "Draw!";
   }
+
 
   return (
     <div className="page">
