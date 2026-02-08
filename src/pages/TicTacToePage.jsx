@@ -2,48 +2,62 @@ import { useState } from "react";
 import Board from "../components/Board";
 import StatusBar from "../components/StatusBar";
 
-function WinningOptions(board) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
+const WINNING_OPTIONS = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+];
 
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
+function calculateGameStatus(board, isXNext) {
+  let winner = null;
+
+
+  for (const [a, b, c] of WINNING_OPTIONS) {
     if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      return board[a];
+      winner = board[a];
+      break;
     }
   }
-  return null;
+
+  const isBoardFull = board.every((cell) => cell !== null);
+  const isDrawStatus = isBoardFull && !winner;
+
+  const turn = isXNext ? "X" : "O";
+
+  return {
+    winner,
+    isDrawStatus,
+    turn,
+  };
 }
 
 export default function TicTacToePage() {
-
   const [board, setBoard] = useState(Array(9).fill(null));
   const [isXNext, setIsXNext] = useState(true);
   const [history, setHistory] = useState(["Game start"]);
+  const { winner, isDrawStatus, turn } = calculateGameStatus(board, isXNext);
 
-  const winner = WinningOptions(board);
-  const turn = isXNext ? "X" : "O";
+  function handleSquareClick(index) {
+ 
+    if (winner || isDrawStatus) return;
+    if (board[index]) return;
 
-  function handleSquareClick(i) {
-    if (winner) return;
-    if (board[i]) return;
+    const nextBoard = board.slice();
+    nextBoard[index] = turn;
 
-    const next = board.slice();
-    next[i] = turn;
-    setBoard(next);
+    setBoard(nextBoard);
     setIsXNext(!isXNext);
-    setHistory((prev) => [...prev,
+    setHistory((prev) => [
+      ...prev,
       `Move #${prev.length}: Player ${turn}`,
     ]);
   }
+
 
   function handleRestart() {
     setBoard(Array(9).fill(null));
@@ -52,15 +66,12 @@ export default function TicTacToePage() {
   }
 
 
-
-  function getStatusText(winner, turn) {
-    if (winner) {
-      return `wins: ${winner}`;
-    }
-    return `Turn: ${turn}`;
+  let statusText = `Turn: ${turn}`;
+  if (winner) {
+    statusText = `wins: ${winner}`;
+  } else if (isDrawStatus) {
+    statusText = "Draw!";
   }
-  
-  const statusText = getStatusText(winner, turn);
 
   return (
     <div className="page">
