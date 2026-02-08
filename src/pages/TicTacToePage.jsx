@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Board from "../components/Board";
 import StatusBar from "../components/StatusBar";
 
@@ -12,6 +12,33 @@ const WINNING_OPTIONS = [
   [0, 4, 8],
   [2, 4, 6],
 ];
+
+const STORAGE_KEY = "tic_tac_toe_state";
+
+useEffect(() => {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+
+  const saved = JSON.parse(raw);
+
+  setBoard(saved.board);
+  setIsXNext(saved.isXNext);
+  setHistory(saved.history);
+}, []);
+
+useEffect(() => {
+  const stateToSave = {
+    board,
+    isXNext,
+    history,
+  };
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+}, [board, isXNext, history]);
+
+
+localStorage.removeItem(STORAGE_KEY);
+
 
 function calculateGameStatus(board, isXNext) {
   let winner = null;
